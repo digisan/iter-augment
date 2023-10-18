@@ -1,5 +1,8 @@
 use iter_augment::util::*;
 
+mod iter;
+use iter::IterColl;
+
 fn main() {
     let a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
@@ -31,4 +34,34 @@ fn main() {
             println!("{err}")
         }
     }
+
+    ////////////////////////////////////////////////////////////////
+
+    let junk = -99999;
+
+    // let mut my_iter: IterColl<'_, i32, 3> = IterColl::new(&vec[..5], -1, junk);
+    // while let Some(e) = my_iter.next_arr() {
+    //     if matches!(e.first(), Some(j) if *j == junk) {
+    //         continue;
+    //     }
+    //     if matches!(e.last(), Some(j) if *j == junk) {
+    //         break;
+    //     }
+    //     println!("main_thread while: {:?}", e);
+    // }
+
+    let mut my_iter: IterColl<'_, i32, 3> = IterColl::new(&a, -1, junk);
+    while let Some(e) = my_iter.next_enum_arr() {
+        if matches!(e.1.first(), Some(j) if *j == junk) {
+            continue;
+        }
+        if matches!(e.1.last(), Some(j) if *j == junk) {
+            break;
+        }
+        println!("main_thread while: {:?}", e);
+    }
+
+    // for e in vec[5..].iter() {
+    //     println!("main_thread for: {}", e);
+    // }
 }
