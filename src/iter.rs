@@ -18,6 +18,7 @@ where
         }
     }
 
+    #[allow(dead_code)]
     pub fn next_arr(&mut self) -> Option<[T; N]> {
         let length = self.collection.len();
         if self.index < length {
@@ -41,6 +42,7 @@ where
         }
     }
 
+    #[allow(dead_code)]
     pub fn next_enum_arr(&mut self) -> Option<(usize, [T; N])> {
         let length = self.collection.len();
         if self.index < length {

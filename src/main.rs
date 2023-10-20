@@ -1,10 +1,17 @@
-use iter_augment::util::*;
+use iter_augment::*;
 
-mod iter;
-use iter::IterColl;
+// mod iter;
+// use iter::IterColl;
+
+// mod iter2d;
+// use iter2d::IterColl2D;
 
 fn main() {
-    let a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    let a = [
+        1, 2, 3, 4, 
+        5, 6, 7, 8, 
+        9, 10, 11, 12
+    ];
 
     let p = &a[0] as *const i32;
     println!("{p:p}");
@@ -29,6 +36,12 @@ fn main() {
             println!("{p:p}");
             let p = &a2[1][1] as *const i32;
             println!("{p:p}");
+
+            let roi = subset::<i32, 2, 3>(&a2, 1, 1);
+            if let Some(roi) = roi {
+                println!("{:?}", roi)
+            }
+
         }
         Err(err) => {
             println!("{err}")
@@ -37,31 +50,31 @@ fn main() {
 
     ////////////////////////////////////////////////////////////////
 
-    let junk = -99999;
+    // let junk = -99999;
 
-    // let mut my_iter: IterColl<'_, i32, 3> = IterColl::new(&vec[..5], -1, junk);
-    // while let Some(e) = my_iter.next_arr() {
-    //     if matches!(e.first(), Some(j) if *j == junk) {
+    // // let mut my_iter: IterColl<'_, i32, 3> = IterColl::new(&vec[..5], -1, junk);
+    // // while let Some(e) = my_iter.next_arr() {
+    // //     if matches!(e.first(), Some(j) if *j == junk) {
+    // //         continue;
+    // //     }
+    // //     if matches!(e.last(), Some(j) if *j == junk) {
+    // //         break;
+    // //     }
+    // //     println!("main_thread while: {:?}", e);
+    // // }
+
+    // let mut my_iter: IterColl<'_, i32, 3> = IterColl::new(&a, -1, junk);
+    // while let Some(e) = my_iter.next_enum_arr() {
+    //     if matches!(e.1.first(), Some(j) if *j == junk) {
     //         continue;
     //     }
-    //     if matches!(e.last(), Some(j) if *j == junk) {
+    //     if matches!(e.1.last(), Some(j) if *j == junk) {
     //         break;
     //     }
     //     println!("main_thread while: {:?}", e);
     // }
 
-    let mut my_iter: IterColl<'_, i32, 3> = IterColl::new(&a, -1, junk);
-    while let Some(e) = my_iter.next_enum_arr() {
-        if matches!(e.1.first(), Some(j) if *j == junk) {
-            continue;
-        }
-        if matches!(e.1.last(), Some(j) if *j == junk) {
-            break;
-        }
-        println!("main_thread while: {:?}", e);
-    }
-
-    // for e in vec[5..].iter() {
-    //     println!("main_thread for: {}", e);
-    // }
+    // // for e in vec[5..].iter() {
+    // //     println!("main_thread for: {}", e);
+    // // }
 }
