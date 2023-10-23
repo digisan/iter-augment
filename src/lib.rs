@@ -42,14 +42,36 @@ pub fn subset<'a, T, const SN: usize, const SM: usize>(
 where
     T: Copy,
 {
+    if y + SM > a2d.len() {
+        return None;
+    }
     let mut ret: [&[T]; SM] = [&[]; SM];
     let rows = &a2d[y..y + SM];
     rows.iter().enumerate().for_each(|(i, ln)| {
-        ret[i] = &ln[x..x + SN];
+        if x + SN <= ln.len() {
+            ret[i] = &ln[x..x + SN];
+        }
     });
-    if ret.len() > 0 {
+    if ret.len() > 0 && ret[0].len() > 0 {
         Some(ret)
     } else {
         None
     }
+}
+
+pub fn make_owned_2d<T, const N: usize, const M: usize>(arr: &[&[T]], junk: T) -> [[T; N]; M]
+where
+    T: Copy,
+{
+    let mut ret = [[junk; N]; M];
+    arr.iter().enumerate().for_each(|(i, r)| {
+        if i < M {
+            (*r).iter().enumerate().for_each(|(j, e)| {
+                if j < N {
+                    ret[i][j] = *e;
+                }
+            })
+        }
+    });
+    ret
 }
