@@ -41,13 +41,21 @@ fn main() {
             let p = &a2[1][1] as *const i32;
             println!("{p:p}");
 
-            let roi = subset::<i32, 3, 3>(&a2, 1, 1);
+            let roi = subset::<i32, 4, 4>(&a2, -1, -1);
             if let Some(roi) = roi {
-                println!("roi:   {:?}", roi);
+                println!("roi 1:   {:?}", roi);
 
                 let my2d: [[i32; 4]; 4] = make_owned_2d(&roi, JUNK);
-                println!("owned: {:?}", my2d);
+                println!("owned 1: {:?}", my2d);
             }
+
+            // let roi = subset::<i32, 3, 3>(&a2, 3, 3);
+            // if let Some(roi) = roi {
+            //     println!("roi 2:   {:?}", roi);
+
+            //     let my2d: [[i32; 3]; 3] = make_owned_2d(&roi, JUNK);
+            //     println!("owned 2: {:?}", my2d);
+            // }
         }
         Err(err) => {
             println!("{err}")
