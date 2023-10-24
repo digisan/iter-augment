@@ -75,16 +75,23 @@ where
     None
 }
 
-pub fn make_owned_2d<T, const N: usize, const M: usize>(arr: &[&[T]], junk: T) -> [[T; N]; M]
+pub fn make_owned_2d<T, const N: usize, const M: usize>(
+    arr: &[&[T]],
+    offset_x: i32,
+    offset_y: i32,
+    junk: T,
+) -> [[T; N]; M]
 where
     T: Copy,
 {
     let mut ret = [[junk; N]; M];
     arr.iter().enumerate().for_each(|(i, r)| {
-        if i < M {
+        let i = i as i32 + offset_y;
+        if i >= 0 && i < M as i32 {
             (*r).iter().enumerate().for_each(|(j, e)| {
-                if j < N {
-                    ret[i][j] = *e;
+                let j = j as i32 + offset_x;
+                if j >= 0 && j < N as i32 {
+                    ret[i as usize][j as usize] = *e;
                 }
             })
         }
