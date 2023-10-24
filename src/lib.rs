@@ -1,3 +1,29 @@
+use std::fmt::Debug;
+
+pub trait Print2D<T, const N: usize, const M: usize> {
+    fn print(&self);
+}
+
+impl<T, const N: usize, const M: usize> Print2D<T, N, M> for [[T; N]; M]
+where
+    T: Debug,
+{
+    fn print(&self) {
+        print!("[");
+        for j in 0..N {
+            println!("\t{}", j);
+        }
+        self.iter().enumerate().for_each(|(i, ln)| {
+            print!("  ({})", i);
+            ln.iter().enumerate().for_each(|(_, e)| {
+                print!("\t{:?}", e);
+            });
+            println!();
+        });
+        println!("]");
+    }
+}
+
 pub fn as_arr<T, const N: usize>(v: &[T]) -> [T; N]
 where
     T: Copy + Default,
@@ -51,7 +77,7 @@ where
     let max_y = if max_y < 0 { 0 } else { max_y as usize };
     let max_y = if max_y > a2d.len() { a2d.len() } else { max_y };
 
-    println!("{} {}", min_y, max_y);
+    // println!("{} {}", min_y, max_y);
 
     let rows = &a2d[min_y..max_y];
 
@@ -97,4 +123,22 @@ where
         }
     });
     ret
+}
+
+pub fn subset_owned<'a, T, const SN_MAX: usize, const SM: usize>(
+    a2d: &'a [&[T]],
+    x: i32,
+    y: i32,
+    junk: T,
+) -> Option<[[T; SN_MAX]; SM]>
+where
+    T: Copy,
+{
+    if let Some(roi) = subset::<T, SN_MAX, SM>(a2d, x, y) {
+        //
+
+        let roi_owned = make_owned_2d(&roi, 0, 0, junk);
+        return Some(roi_owned);
+    }
+    None
 }

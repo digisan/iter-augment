@@ -11,10 +11,7 @@ const JUNK: i32 = -99999;
 
 fn main() {
     let a = [
-        01, 02, 03, 04, 05, 
-        06, 07, 08, 09, 10, 
-        11, 12, 13, 14, 15, 
-        16, 17, 18, 19, 20,
+        01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
     ];
 
     let p = &a[0] as *const i32;
@@ -26,30 +23,38 @@ fn main() {
     let p = &a[3] as *const i32;
     println!("{p:p}");
 
-    // let a2 = dim_up::<i32, 4, 3>(&a);
-    // println!("{a2:?}");
+    // let a2d = dim_up::<i32, 4, 3>(&a);
+    // println!("{a2d:?}");
 
     match dim_up_fit::<i32, 5, 4>(&a) {
-        Ok(a2) => {
-            println!("{a2:?}");
-            let p = &a2[0][0] as *const i32;
+        Ok(a2d) => {
+            println!("{a2d:?}");
+            let p = &a2d[0][0] as *const i32;
             println!("{p:p}");
-            let p = &a2[0][1] as *const i32;
+            let p = &a2d[0][1] as *const i32;
             println!("{p:p}");
-            let p = &a2[1][0] as *const i32;
+            let p = &a2d[1][0] as *const i32;
             println!("{p:p}");
-            let p = &a2[1][1] as *const i32;
+            let p = &a2d[1][1] as *const i32;
             println!("{p:p}");
 
-            let roi = subset::<i32, 2, 2>(&a2, 0, 0);
-            if let Some(roi) = roi {
-                println!("roi 1:   {:?}", roi);
-
-                let my2d: [[i32; 3]; 3] = make_owned_2d(&roi, 1, 1, JUNK);
-                println!("owned 1: {:?}", my2d);
+            if let Some(roi_owned) = subset_owned::<i32, 3, 3>(&a2d, -1, -1, JUNK) {
+                Print2D::print(&roi_owned);
             }
 
-            // let roi = subset::<i32, 3, 3>(&a2, 3, 3);
+            if let Some(roi_owned) = subset_owned::<i32, 3, 3>(&a2d, 4, 3, JUNK) {
+                Print2D::print(&roi_owned);
+            }
+
+            // let roi = subset::<i32, 2, 2>(&a2d, 0, 0);
+            // if let Some(roi) = roi {
+            //     println!("roi 1:   {:?}", roi);
+
+            //     let my2d: [[i32; 3]; 3] = make_owned_2d(&roi, 1, 1, JUNK);
+            //     println!("owned 1: {:?}", my2d);
+            // }
+
+            // let roi = subset::<i32, 3, 3>(&a2d, 3, 3);
             // if let Some(roi) = roi {
             //     println!("roi 2:   {:?}", roi);
 
