@@ -4,19 +4,59 @@ pub trait Print2D<T, const N: usize, const M: usize> {
     fn print(&self);
 }
 
-impl<T, const N: usize, const M: usize> Print2D<T, N, M> for [[T; N]; M]
+impl<T, const N: usize, const M: usize> Print2D<T, N, M> for [&[T]; M]
 where
-    T: Debug,
+    T: Debug + std::fmt::Display,
 {
     fn print(&self) {
-        print!("[");
-        for j in 0..N {
-            println!("\t{}", j);
+        let mut max_len = 0;
+        for ln in self {
+            for e in *ln {
+                let s = format!("{}", e);
+                max_len = if s.len() > max_len { s.len() } else { max_len };
+            }
         }
+        max_len = if max_len < 3 { 3 } else { max_len };
+
+        print!("[    ");
+        for j in 0..N {
+            print!("{:>width$}", format!("{:02}|", j), width = max_len + 1);
+        }
+        println!();
         self.iter().enumerate().for_each(|(i, ln)| {
-            print!("  ({})", i);
+            print!("{:>4}", format!("{:02}|", i));
             ln.iter().enumerate().for_each(|(_, e)| {
-                print!("\t{:?}", e);
+                print!("{:>width$}", e, width = max_len + 1);
+            });
+            println!();
+        });
+        println!("]");
+    }
+}
+
+impl<T, const N: usize, const M: usize> Print2D<T, N, M> for [[T; N]; M]
+where
+    T: Debug + std::fmt::Display,
+{
+    fn print(&self) {
+        let mut max_len = 0;
+        for ln in self {
+            for e in ln {
+                let s = format!("{}", e);
+                max_len = if s.len() > max_len { s.len() } else { max_len };
+            }
+        }
+        max_len = if max_len < 3 { 3 } else { max_len };
+
+        print!("[    ");
+        for j in 0..N {
+            print!("{:>width$}", format!("{:02}|", j), width = max_len + 1);
+        }
+        println!();
+        self.iter().enumerate().for_each(|(i, ln)| {
+            print!("{:>4}", format!("{:02}|", i));
+            ln.iter().enumerate().for_each(|(_, e)| {
+                print!("{:>width$}", e, width = max_len + 1);
             });
             println!();
         });
@@ -135,9 +175,8 @@ where
     T: Copy,
 {
     if let Some(roi) = subset::<T, SN_MAX, SM>(a2d, x, y) {
-        //
-
-        let roi_owned = make_owned_2d(&roi, 0, 0, junk);
+        let offset_x = if x < 0 { -x } else { 0 };
+        let roi_owned = make_owned_2d(&roi, offset_x, 0, junk);
         return Some(roi_owned);
     }
     None
